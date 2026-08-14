@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Project Docs"
+  short_description: "Audit code-to-doc alignment before changes or commits"
+  default_prompt: "Use $audit-project-docs to audit this project documentation against the codebase."
