@@ -1,0 +1,7 @@
+interface:
+  display_name: "Generate Commit Messages"
+  short_description: "Prepare cohesive commits with scoped messages"
+  default_prompt: "Use $gen-commit to partition my completed work and prepare cohesive commits."
+
+policy:
+  allow_implicit_invocation: true
