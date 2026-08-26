@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Agent Skills"
+  short_description: "Centralize skills and safely manage symlinks"
+  default_prompt: "Use $manage-agent-skills to centralize, validate, and link my skills across Claude and Agents."
