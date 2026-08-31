@@ -1,0 +1,6 @@
+interface:
+  display_name: "Create GitLab MR"
+  short_description: "Create a project-formatted GitLab merge request"
+  default_prompt: "Use $create-pr to create a GitLab merge request into the target branch."
+policy:
+  allow_implicit_invocation: false
