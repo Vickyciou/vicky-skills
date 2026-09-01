@@ -118,7 +118,23 @@ Choose an optional scope as a short lowercase noun naming the affected area, suc
 
 Write the subject in English, start with a base-form verb such as `add`, `fix`, `refactor`, `remove`, `update`, `extract`, or `rename`, keep it at 72 characters or fewer, and omit the final period.
 
-Add an English bullet body only when the change spans multiple modules or needs non-obvious context. Keep it to five bullets or fewer, with each bullet describing a concrete change or reason. Omit the body for a simple change.
+Default to a subject-only message. Add an English bullet body only when the subject cannot capture reviewer-relevant motivation, constraints, migration impact, or risk. The number of changed files or modules does not justify a body.
+
+When a body is necessary:
+
+- Write one or two bullets, each a single sentence of at most 20 words.
+- Capture the outcome or reason at commit level rather than inventorying implementation details.
+- Keep only details whose absence could cause a reviewer to misunderstand the change.
+- Move file paths, symbol lists, upstream hashes, build-setting details, validation evidence, and unchanged behavior to the breakdown or task report.
+- Remove any bullet that merely repeats the subject. If no bullet survives this compression pass, omit the body.
+
+For example, summarize a multi-file dependency migration as:
+
+```text
+chore(toast): vendor Toast 4.1.1 in the SDK
+
+- Remove the CocoaPods dependency while preserving privacy and license delivery
+```
 
 ## Report the Result
 
