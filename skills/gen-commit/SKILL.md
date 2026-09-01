@@ -74,11 +74,13 @@ Perform this section only in commit mode.
 
    Commit only when every staged hunk belongs to the current partition and the staged diff is non-empty.
 
-3. Create the commit with the approved message. Allow repository hooks to run. If a hook fails or changes files, inspect the resulting status and resolve only issues within the current task's authority.
+3. When the user or applicable project instructions require a documentation gate and this final staged partition contains source, build, or configuration changes, invoke `audit-project-docs` in pre-commit mode. Continue only on `PASS`; otherwise return its report or unresolved question, preserve the staged partition, and stop. Treat an unavailable audit skill as a blocker.
 
-4. Run `git status --short`, then repeat for the next partition.
+4. Create the commit with the approved message. Allow repository hooks to run. If a hook fails or changes files, inspect the resulting status and resolve only issues within the current task's authority.
 
-5. Finish only when every in-scope hunk was committed exactly once and unrelated changes remain uncommitted and unmodified. Report each created commit's short hash and subject, plus any remaining changes.
+5. Run `git status --short`, then repeat for the next partition.
+
+6. Finish only when every in-scope hunk was committed exactly once and unrelated changes remain uncommitted and unmodified. Report each created commit's short hash and subject, plus any remaining changes.
 
 ## Write the Message
 
