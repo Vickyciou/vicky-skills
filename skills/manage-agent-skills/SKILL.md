@@ -5,9 +5,9 @@ description: Manage personal AI-agent skills in central collections and keep the
 
 # Manage Agent Skills
 
-Keep each real skill under a collection in `/Users/vickyciou/Documents/Developer/Skills`. Expose skills through symlinks in `~/.claude/skills` and `~/.agents/skills`.
+Keep each real skill under a collection in `~/Developer/Skills`. Expose skills through symlinks in `~/.claude/skills` and `~/.agents/skills`.
 
-Run every manager command with working directory `/Users/vickyciou/Documents/Developer/Skills/vicky-skills/skills/manage-agent-skills`.
+Run every manager command with working directory `~/Developer/Skills/vicky-skills/skills/manage-agent-skills`.
 
 ## Guardrails
 
@@ -20,8 +20,8 @@ Run every manager command with working directory `/Users/vickyciou/Documents/Dev
 
 ### 1. Select the source root
 
-- For Vicky's skills, use `/Users/vickyciou/Documents/Developer/Skills/vicky-skills/skills`.
-- For another collection, use `/Users/vickyciou/Documents/Developer/Skills/<collection-name>`.
+- For Vicky's skills, use `~/Developer/Skills/vicky-skills/skills`.
+- For another collection, use `~/Developer/Skills/<collection-name>`.
 
 Pass the selected directory as `--central-root`. Keep every managed skill as its direct child, named in lowercase hyphen-case and containing `SKILL.md`.
 

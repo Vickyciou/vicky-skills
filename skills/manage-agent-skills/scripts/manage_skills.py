@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Iterable
 
 
-DEFAULT_CENTRAL_ROOT = Path("/Users/vickyciou/Documents/Developer/Skills/vicky-skills/skills")
+DEFAULT_CENTRAL_ROOT = Path("~/Developer/Skills/vicky-skills/skills").expanduser()
 DEFAULT_TARGETS = (Path.home() / ".claude/skills", Path.home() / ".agents/skills")
 
 
