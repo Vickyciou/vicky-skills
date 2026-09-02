@@ -78,9 +78,17 @@ Perform this section only in commit mode.
 
 4. Create the commit with the approved message. Allow repository hooks to run. If a hook fails or changes files, inspect the resulting status and resolve only issues within the current task's authority.
 
-5. Run `git status --short`, then repeat for the next partition.
+5. Record the committed partition for the local worklog when `worklog` is available:
 
-6. Finish only when every in-scope hunk was committed exactly once and unrelated changes remain uncommitted and unmodified. Report each created commit's short hash and subject, plus any remaining changes.
+   - Resolve the repository root and new commit hash, then read the current schema with `worklog record-commit --help` once per run.
+   - Build one factual note from the inspected diff and task context. State the outcome in Taiwan Traditional Chinese; include the technical approach, an explicit decision and reason, an explicit remaining step, or public technology names only when supported. Keep secrets, credentials, raw code, and personal identities out.
+   - Pass the note through stdin to `worklog record-commit <repo-root> <commit>`. A recording failure does not undo a successful Git commit; retain the failure for the final report.
+
+   Completion criterion: the commit has a worklog git note, or the unavailable command or recording error is captured for reporting.
+
+6. Run `git status --short`, then repeat for the next partition.
+
+7. Finish only when every in-scope hunk was committed exactly once and unrelated changes remain uncommitted and unmodified. Report each created commit's short hash and subject, worklog recording status, plus any remaining changes.
 
 ## Write the Message
 
