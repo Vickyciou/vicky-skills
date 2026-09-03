@@ -1,7 +1,6 @@
 ---
 name: gen-commit
 description: Prepare Git commits after completing an authorized task by partitioning changes, staging or unstaging intended hunks, and writing scoped English Conventional Commit messages. Use when the user invokes gen-commit, asks for commit messages, or asks the agent to commit completed work.
-disable-model-invocation: false
 ---
 
 # Generate Commits
@@ -78,13 +77,14 @@ Perform this section only in commit mode.
 
 4. Create the commit with the approved message. Allow repository hooks to run. If a hook fails or changes files, inspect the resulting status and resolve only issues within the current task's authority.
 
-5. Record the committed partition for the local worklog when `worklog` is available:
+5. Capture the committed partition for the local worklog when `worklog` is available:
 
-   - Resolve the repository root and new commit hash, then read the current schema with `worklog record-commit --help` once per run.
-   - Build one factual note from the inspected diff and task context. State the outcome in Taiwan Traditional Chinese; include the technical approach, an explicit decision and reason, an explicit remaining step, or public technology names only when supported. Keep secrets, credentials, raw code, and personal identities out.
-   - Pass the note through stdin to `worklog record-commit <repo-root> <commit>`. A recording failure does not undo a successful Git commit; retain the failure for the final report.
+   - On the first successful commit, run `worklog capture --help` exactly once and retain its output as the live input contract for every partition in this run.
+   - Resolve the repository root and new commit hash. Build exactly one JSON object that follows the retained contract, using only facts supported by the inspected committed diff and task context. State the outcome in Taiwan Traditional Chinese; include optional approach, decisions and reasons, remaining steps, public technologies, or source metadata only when supported. Keep secrets, credentials, raw code, and personal identities out.
+   - Pass the JSON through stdin to `worklog capture <repo-root> <commit>`. Keep this integration limited to that generic contract.
+   - A help or capture failure does not undo or rewrite a successful Git commit. Retain the exact error and report a matching next action, such as installing or exposing `worklog`, correcting the JSON against the retained help, or resolving an existing-note conflict before retrying capture.
 
-   Completion criterion: the commit has a worklog git note, or the unavailable command or recording error is captured for reporting.
+   Completion criterion: the commit has a worklog Git note, or the unavailable command or actionable capture error is retained for the final report.
 
 6. Run `git status --short`, then repeat for the next partition.
 
