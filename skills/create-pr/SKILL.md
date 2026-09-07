@@ -1,7 +1,6 @@
 ---
 name: create-pr
 description: Create a project-formatted GitLab merge request from the current branch into a specified target branch.
-disable-model-invocation: true
 ---
 
 # Create GitLab Merge Request
@@ -106,14 +105,18 @@ Write MR titles in English and user-facing explanations in Taiwan Traditional Ch
 
    ```markdown
    ## Summary（必填）
-   <此次修改的目的，1～2 行>
+   <此次解決的問題或動機，1～2 行；有對應 issue 於此連結>
 
    ## Changes（必填）
-   - <主要變更與行為影響>
+   - <高階做法與行為影響，勿逐行複述 diff>
    - <其他核心邏輯、UI、bug fix 或 dependency 變更>
 
+   ## Impact（必填）
+   - 相容性：<向後相容，或破壞性變更並列出所需 migration 步驟>
+   - 風險等級：<低 / 中 / 高，及理由>
+
    ## Notes
-   <reviewer 需留意的風險、限制或後續工作>
+   <reviewer 建議重點看的檔案或順序、限制或後續工作>
 
    ## Test Scope
    - [ ] Device / OS：<裝置與 OS，或「未執行」及原因>
@@ -125,6 +128,7 @@ Write MR titles in English and user-facing explanations in Taiwan Traditional Ch
    - <GitLab Issue、Notion、相關 MR 或文件連結>
    ```
 
+   `Impact` 必填：即使無風險也要正面表態（例如「無破壞性變更、向後相容」），不得靜默省略。
    Omit `Notes` and `Reference` when empty. Omit `Test Scope` for documentation-only changes.
    Mark a checkbox `[x]` only when the corresponding check has evidence; otherwise keep `[ ]`
    and state what was not run. Never infer test execution from the presence of test files.
