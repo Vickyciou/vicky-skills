@@ -1,11 +1,11 @@
 ---
 name: gen-commit
-description: Prepare Git commits after completing an authorized task by partitioning changes, staging or unstaging intended hunks, and writing scoped English Conventional Commit messages. Use when the user invokes gen-commit, asks for commit messages, or asks the agent to commit completed work.
+description: Prepare Git commits by partitioning changes into cohesive commits and writing scoped Conventional Commit messages. Use when the user asks for commit messages or asks the agent to commit completed work.
 ---
 
 # Generate Commits
 
-Inspect the repository, divide changes into cohesive commits, and produce scoped Conventional Commit messages. Match repository mutations to the authority already granted by the caller.
+Match repository mutations to the authority already granted by the caller.
 
 ## Choose the Mode
 
@@ -96,9 +96,6 @@ Use a scope when one short affected area accurately names the partition:
 
 ```text
 <type>(<scope>): <subject>
-
-- <change or reason>
-- <change or reason>
 ```
 
 Omit the parentheses when no single useful scope applies:
@@ -115,35 +112,50 @@ Choose one type by the partition's dominant impact:
 | `fix` | Corrected bug or incorrect behavior |
 | `refactor` | Structural or naming changes with unchanged behavior |
 | `docs` | Documentation-only changes |
-| `chore` | Build settings, dependencies, project files, or non-product maintenance |
+| `build` | Build system, packaging scripts, or dependency management |
+| `ci` | CI pipeline configuration |
+| `chore` | Other non-product maintenance |
 | `test` | Test-only changes |
 | `style` | Formatting-only changes with no logic impact |
 | `perf` | Performance improvements |
 
 Prefer `feat` when one cohesive partition contains both a new feature and its fixes. Otherwise choose the type that describes the partition's primary effect.
 
-Mark a breaking change by appending `!` after the type or scope (`feat(auth)!: ...`) and adding a `BREAKING CHANGE: <migration>` footer describing what callers must change. Reserve this for a partition that removes or alters a public contract.
+Mark a breaking change by appending `!` after the type or scope (`feat(auth)!: ...`) and adding a `BREAKING CHANGE: <migration>` footer describing what callers must change. Reserve this for a partition that removes or alters a public contract. Keep this footer and trailers such as `Co-Authored-By` in their standard English format.
 
 Choose an optional scope as a short lowercase noun naming the affected area, such as `auth`, `dashboard`, or `deps`. Prefer the repository's established scope vocabulary when visible in recent commit subjects. Omit the scope for broad changes or when a precise scope would be forced.
 
 Write the subject in English, start with a base-form verb such as `add`, `fix`, `refactor`, `remove`, `update`, `extract`, or `rename`, keep it at 72 characters or fewer, and omit the final period.
 
-Default to a subject-only message. Add an English bullet body only when the subject cannot capture reviewer-relevant motivation, constraints, migration impact, or risk. The number of changed files or modules does not justify a body.
+Default to a subject-only message. Add a bullet body only when the subject cannot capture reviewer-relevant motivation, constraints, migration impact, or risk. The number of changed files or modules does not justify a body.
 
 When a body is necessary:
 
-- Write one or two bullets, each a single sentence of at most 20 words.
-- Capture the outcome or reason at commit level rather than inventorying implementation details.
-- Keep only details whose absence could cause a reviewer to misunderstand the change.
-- Move file paths, symbol lists, upstream hashes, build-setting details, validation evidence, and unchanged behavior to the breakdown or task report.
+- Write it in Taiwan Traditional Chinese. Keep proper nouns, file names, commands, symbols, APIs, and configuration keys in their original English, and wrap code-related names in backticks.
+- Write two or three bullets; a simple change may need only one.
+- Give each bullet one point as one line of at most 40 full-width characters, counting two half-width characters as one.
+- Spend the bullets on the problem or cause, the change made, and the risk it prevents or its impact.
+- Keep only words whose absence could cause a reviewer to misunderstand the change.
+- Move per-file implementation details, file paths, symbol lists, upstream hashes, build-setting details, results of validation you ran, metrics, and unchanged behavior to the breakdown or task report.
 - Remove any bullet that merely repeats the subject. If no bullet survives this compression pass, omit the body.
 
-For example, summarize a multi-file dependency migration as:
+When the repository's `CLAUDE.md` or `AGENTS.md`, or the user, sets a different commit-message language, follow that instead.
+
+For example:
 
 ```text
-chore(toast): vendor Toast 4.1.1 in the SDK
+build(artifacts): ship only MitakeFinance-owned objects in the XCFramework
 
-- Remove the CocoaPods dependency while preserving privacy and license delivery
+- Xcode 把 SwiftPM product 的 `.o` 與 Pods dummy 併進 `.a`，App 端 class 重複
+- 依 provenance 只保留 SDK、TCAPI／MTFAPI、vendor objects 重組；無法判定即失敗
+- 驗證排除套件的符號 defined＝0；`artifact-manifest.json` 記錄 KEEP／EXCLUDE 數量
+```
+
+```text
+ci(psck-verify): make the migration verification pipeline package-only
+
+- 移除 `.a` 的 build、verify、archive、parity stages
+- XCFramework build 每次必跑；production `Jenkinsfile` 不變
 ```
 
 ## Report the Result
