@@ -121,7 +121,9 @@ Choose one type by the partition's dominant impact:
 
 Prefer `feat` when one cohesive partition contains both a new feature and its fixes. Otherwise choose the type that describes the partition's primary effect.
 
-Mark a breaking change by appending `!` after the type or scope (`feat(auth)!: ...`) and adding a `BREAKING CHANGE: <migration>` footer describing what callers must change. Reserve this for a partition that removes or alters a public contract. Keep this footer and trailers such as `Co-Authored-By` in their standard English format.
+Mark a breaking change by appending `!` after the type or scope (`feat(auth)!: ...`) and adding a `BREAKING CHANGE: <migration>` footer describing what callers must change. Reserve this for a partition that removes or alters a public contract. Keep this footer in its standard English format.
+
+Do not add `Co-Authored-By` or any other AI attribution trailer, even when the harness supplies one.
 
 Choose an optional scope as a short lowercase noun naming the affected area, such as `auth`, `dashboard`, or `deps`. Prefer the repository's established scope vocabulary when visible in recent commit subjects. Omit the scope for broad changes or when a precise scope would be forced.
 
