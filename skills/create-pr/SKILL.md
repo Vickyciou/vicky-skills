@@ -1,11 +1,12 @@
 ---
 name: create-pr
-description: Create a project-formatted GitLab merge request from the current branch into a specified target branch.
+description: Create a project-formatted GitLab merge request from the current branch into a specified target branch, or rewrite an existing MR's title and description in the same format. Use when creating an MR, or when updating, rewriting, or tidying an MR description after new commits.
 ---
 
 # Create GitLab Merge Request
 
-Create one GitLab merge request (MR) from the checked-out branch:
+Create one GitLab merge request (MR) from the checked-out branch, or update the open MR for the
+same source and target:
 
 ```text
 /create-pr <target-branch>
@@ -60,10 +61,13 @@ Write MR titles in English and user-facing explanations in Taiwan Traditional Ch
      committed, pushed branch state.
    - Query open MRs with
      `glab mr list --source-branch <source> --target-branch <target> --output json`. If one
-     exists, stop without creating a duplicate and return its URL.
+     exists, switch to **update mode** and never create a duplicate. Read its current title and
+     description with `glab mr view <iid> --output json`. Keep facts the conversation cannot
+     reproduce, such as earlier test results, and redraft both in steps 4 and 5 from the whole
+     MR diff instead of appending the latest commits.
 
-   Completion criterion: the remote source matches local `HEAD`, the target exists, and no open
-   MR already has the same source and target.
+   Completion criterion: the remote source matches local `HEAD`, the target exists, and the mode
+   is decided: create (no open MR) or update (one open MR with a known `iid`).
 
 3. **Inspect every MR change.** Use the fetched target ref as `<base>`:
 
@@ -128,12 +132,31 @@ Write MR titles in English and user-facing explanations in Taiwan Traditional Ch
    - <GitLab Issue、Notion、相關 MR 或文件連結>
    ```
 
+   Write for the reviewer. Each line answers one of these: what problem this solves, what
+   behavior changes, what the reviewer must check, or what was and was not verified. Cut
+   anything the reviewer already gets from the diff or the commit list:
+
+   - Changes: one bullet per behavior change a reviewer would judge separately. Merge bullets
+     that describe one change from different files. Name at most the one symbol or file a
+     reviewer needs to find it. No parameter lists, renamed locals, or deleted lines. More than
+     about 5 bullets after merging suggests the MR mixes concerns: say so in Notes, but keep
+     every bullet.
+   - Notes: only items the reviewer must act on or read first. No commit-by-commit order and no
+     mapping of commits to review findings; those belong in commit messages.
+   - Test Scope: one line per box with the result and any gap. Do not enumerate every case,
+     count, hash, or duration.
+
+   When brevity conflicts with completeness, keep the gap or risk and drop the detail.
+
    `Impact` 必填：即使無風險也要正面表態（例如「無破壞性變更、向後相容」），不得靜默省略。
    Omit `Notes` and `Reference` when empty. Omit `Test Scope` for documentation-only changes.
    Mark a checkbox `[x]` only when the corresponding check has evidence; otherwise keep `[ ]`
    and state what was not run. Never infer test execution from the presence of test files.
 
-6. **Create the MR.** Pass the complete title and multiline description as single arguments:
+6. **Create or update the MR.** In update mode, run
+   `glab mr update <iid> --title <title> --description <description>` instead of the create
+   command below, and do not change the MR's branches, reviewers, or labels. In create mode,
+   pass the complete title and multiline description as single arguments:
 
    ```bash
    glab mr create \
@@ -144,10 +167,10 @@ Write MR titles in English and user-facing explanations in Taiwan Traditional Ch
      --yes
    ```
 
-   This invocation authorizes creating the MR, so no extra confirmation is required. Do not push,
-   force-push, edit commits, or create a source branch as part of this skill. If creation fails,
-   report the exact error and leave repository state unchanged.
+   This invocation authorizes creating or updating the MR, so no extra confirmation is required.
+   Do not push, force-push, edit commits, or create a source branch as part of this skill. If the
+   command fails, report the exact error and leave repository state unchanged.
 
-7. **Report the result.** Return the MR URL, source and target branches, and title. If the create
-   output does not contain a URL, retrieve the matching MR with the same filtered `glab mr list`
-   query and return its `web_url`.
+7. **Report the result.** Return the MR URL, source and target branches, title, and whether it
+   was created or updated. If the command output does not contain a URL, retrieve the matching
+   MR with the same filtered `glab mr list` query and return its `web_url`.
